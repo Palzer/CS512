@@ -54,6 +54,7 @@ void								printf("T_VOID\n");
 while								printf("T_WHILE\n");
 [a-zA-Z_][a-zA-Z_0-9]*				printf("T_ID %s\n",yytext);
 [ \t\n\v\f\r]						if (strcmp("\n",yytext) == 0){ yytext = "\\n"; yylineno++; } printf("T_WHITESPACE %s\n",yytext);
-[^ \n()\[\]\=\;\,\/\.\>\{\<\}\*\-\%\!\|\+]*						printf("unrecognized token: %s\n",yytext);
+[^ \n()\[\]\=\;\,\/\.\>\{\<\}\*\-\%\!\|\+&]*						printf("unrecognized token: %s\n",yytext);
+&|\|									printf("unrecognized token: %s\n",yytext);
 
 %%
