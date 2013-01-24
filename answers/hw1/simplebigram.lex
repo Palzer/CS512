@@ -33,12 +33,13 @@ void inc_pair();
 
 int main () {
 	yylex();
-  pair** array;
+  pair** array = 0;
   int numwords = 0;
   char* one = "hey";
   char* two = "you";
   
   //display(numwords,array);
+  add_pair(&numwords,array,one,two);
   add_pair(&numwords,array,one,two);
   display(numwords,array);
 }
@@ -53,13 +54,19 @@ void add_pair(int *numwords, pair** pairs, char* one, char* two)
 	newwords.word2 = malloc(strlen(two));
 	strcpy(newwords.word2,two);
 	newwords.count = 1;
+	fprintf(stderr,"	Pair (word1: %s,word2: %s, count: %i) created\n",newwords.word1,newwords.word2,newwords.count);
 	
 	//make pair count one more
+	fprintf(stderr,"	Dictionary held %i pairs\n",*numwords);
+	fprintf(stderr,"	Size of dictionary had room for %i pairs, %i\n",sizeof(pairs)/sizeof(pair*));
 	*numwords = *numwords + 1;
+	fprintf(stderr,"	Dictionary will hold %i pairs\n",*numwords);
 	
-	pairs = realloc(pairs,*numwords*sizeof(pair*)); //make spot in dictionary for new pair
-	pairs[*numwords-1] = malloc(sizeof(newwords)); //make correct space in spot for new pair
-	memcpy(pairs[*numwords-1],&newwords,sizeof(newwords)); //copy pair into the spot
+	fprintf(stderr,"	reallocing dictionary to hold %i pairs\n",*numwords);
+	pairs = realloc(pairs,3*sizeof(pair*)); //make spot in dictionary for new pair
+	fprintf(stderr,"	Size of dictionary now has room for %i pairs\n",sizeof(pairs)/sizeof(pair*));
+	//pairs[*numwords-1] = malloc(sizeof(newwords)); //make correct space in spot for new pair
+	//memcpy(pairs[*numwords-1],&newwords,sizeof(newwords)); //copy pair into the spot
 }
 
 void display(int numwords, pair** pairs)
