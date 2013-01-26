@@ -4,6 +4,7 @@ int yycolno = 1;
 char error[100];
 int error_length = 0;
 void print_error();
+void print_error_info();
 %}
 
 charconstant 	\'(\\[tvrnafb\\']|[^'\\\n])\'
@@ -11,7 +12,9 @@ intconstant		[0-9]+|"0x"[0-9a-fA-F]+
 stringconstant	\"(\\[tvrnafb\\]|[^\\"\n])*\"
 id				[a-zA-Z_][a-zA-Z_0-9]*
 whitespace		[ \t\n\v\f\r]
+escape (\\[tvrnafb\\])
 %%
+
 
 "&&"								print_error(); printf("T_AND\n"); yycolno = yycolno + yyleng;
 "="									print_error(); printf("T_ASSIGN\n");  yycolno = yycolno + yyleng;
@@ -63,6 +66,22 @@ void								print_error(); printf("T_VOID\n"); yycolno = yycolno + yyleng;
 while								print_error(); printf("T_WHILE\n"); yycolno = yycolno + yyleng;
 {id}								print_error(); printf("T_ID %s\n",yytext); yycolno = yycolno + yyleng;
 {whitespace}						print_error(); if (strcmp("\n",yytext) == 0){ yytext = "\\n"; yylineno++; yycolno = 1;} else {yycolno = yycolno + yyleng;} printf("T_WHITESPACE %s\n",yytext);
+
+
+\'\\[^[tvrnafb\\]]\'                printf("Error: Unknown escape sequence in string constant:"); print_error_info(); 
+\'[\n]\'                            printf("Error: Character constant contains newline:"); print_error_info();   
+\'..+\'                             printf("Error: Character constant length is greater than one:"); print_error_info(); 
+\'\\\'                              printf("Error: Unterminated character :"); print_error_info();
+\'\'                                printf("Error: Character constant contain zero characters :"); print_error_info();
+\'[^\'\n][^\'\n][\n]                printf("Error: Unterminated character constant:"); print_error_info(); 
+
+
+\"[\n]                              printf("Error: Newline in string constant:"); print_error_info(); 
+\"[^\"\n][^\"\n]+[\n]               printf("Error: Unterminated string constant:"); print_error_info(); 
+\"..+\'                             printf("Error: String constant has invalid closing delimiter:"); print_error_info();
+\".*[\\][^[tvrnafb\\]].*\"          printf("Error: Unknown escape sequence in string constant:"); print_error_info();
+
+
 .									error[error_length] = yytext[0]; error_length++; error[error_length] = 0;//printf("unrecognized token: %s, on line %i, columns %i-%i\n",yytext,yylineno,yycolno,yycolno+yyleng-1); yycolno = yycolno + yyleng;
 
 %%
@@ -70,8 +89,14 @@ while								print_error(); printf("T_WHILE\n"); yycolno = yycolno + yyleng;
 void print_error(){
 
 	if (error_length > 0){
-		printf("unrecognized token: %s, on line %i, columns %i-%i\n",error,yylineno,yycolno,yycolno+error_length-1); yycolno = yycolno + error_length;
+		printf("Error: Unrecognized token: %s, on line %i, columns %i-%i\n",error,yylineno,yycolno,yycolno+error_length-1); yycolno = yycolno + error_length;
 		error_length = 0;
+		exit(1);
 	}
+}
+
+void print_error_info(){
+	printf("%s, on line %i, columns %i-%i\n",yytext,yylineno,yycolno,yycolno+yycolno+yyleng-1);
+	exit(1);
 }
 

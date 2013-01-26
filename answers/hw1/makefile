@@ -2,7 +2,7 @@
 lexlib=l
 bindir=.
 rm=/bin/rm -f
-targets=rmcomments idtoken tokenizer decaflex leftcontext reject simplebigram
+targets=rmcomments idtoken tokenizer decaflex leftcontext reject bigram
 cpptargets=
 
 all: $(targets) $(cpptargets)
