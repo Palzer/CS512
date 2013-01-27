@@ -91,9 +91,10 @@ void add_pair(pair** pairs, char* one, char* two)
 void display(pair* pairs)
 {
 	int i;
-	fprintf(stderr,"Dictionary has %i pair(s) and is:\n",numwords);
 	for(i = 0; i < numwords; i++)
 	{
-		fprintf(stderr,"	Pair: %-5i	 Word 1: %-15s	 Word 2: %-15s	 Occurences: %-5i\n",i,pairs[i].word1,pairs[i].word2,pairs[i].count);
+		//printf("	Pair: %-5i	 Word 1: %-15s	 Word 2: %-15s	 Occurences: %-5i\n",i,pairs[i].word1,pairs[i].word2,pairs[i].count);
+		printf("%s %s %i\n",pairs[i].word1,pairs[i].word2,pairs[i].count);
+		//snprintf into an array of strings and then sort the array
 	}
 }
