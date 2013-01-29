@@ -15,20 +15,20 @@ typedef struct {
 	char* word1;
 	char* word2;
 	int count;
+	struct pair* next;
 }pair;
 
-  pair* array = 0;
-  int numwords = 0;
+  pair* list = 0;
   char* lastword = 0;
   
- void look_for_pair(pair** currpair, char** one, char* two);
-void add_pair(pair** pairs, char* one, char* two);
-void display(pair* pairs);
+void look_for_pair(char** one, char* two);
+void add_pair(char* one, char* two);
+void display();
 
 %}
 
 %%
-[a-zA-Z]+		look_for_pair(&array,&lastword,yytext);
+[a-zA-Z]+		look_for_pair(&lastword,yytext);
 \n		;
 .		;
 %%
@@ -36,28 +36,28 @@ void display(pair* pairs);
 int main () {
 	yylex();
   
-  display(array);
+  display(list);
 
 }
 
-void look_for_pair(pair** currpair, char** one, char* two){
+void look_for_pair(char** one, char* two){
 
-	int i;
 	int found = 0;
-	pair* thispair = *currpair;
+	pair* pair = list;
 	//fprintf(stderr,"looking for pair (%s,%s)\n",*one,two);
-	for (i = 0; i < numwords; i++){
-		if (strcmp(thispair[i].word1,*one) == 0){
-			if (strcmp(thispair[i].word2,two) == 0){
+	while (pair != 0){
+		if (strcmp(pair->word1,*one) == 0){
+			if (strcmp(pair->word2,two) == 0){
 				//fprintf(stderr,"Found pair, incrementing\n");
-				thispair[i].count++;
+				pair->count++;
 				found = 1;
 			}
 		}
+		pair = pair->next;
 	}
 	if ((found == 0) && (*one != 0)){
 		//fprintf(stderr,"didnt find. adding to dictionary\n");
-		add_pair(currpair,*one,two);
+		add_pair(*one,two);
 	}
 	
 	//fprintf(stderr,"moving strings along\n");
@@ -67,34 +67,70 @@ void look_for_pair(pair** currpair, char** one, char* two){
 
 }
 
-void add_pair(pair** pairs, char* one, char* two)
+void add_pair(char* one, char* two)
 {
-	int i;
 	//fprintf(stderr,"adding pair (%s,%s) to dictionary\n",one,two);
 	
-	//make pair count one more*/
-	numwords = numwords + 1;
-
-	//realloc memory and make a pointer to move stuff around
-	*pairs = realloc(*pairs,numwords*sizeof(pair));
-	pair* newarray = *pairs;
+	pair* newpair = malloc(sizeof(pair));
 	
 	//create words and count
-	newarray[numwords-1].word1 = malloc(strlen(one) + 1);
-	strcpy(newarray[numwords-1].word1,one);
-	newarray[numwords-1].word2 = malloc(strlen(two) + 1);
-	strcpy(newarray[numwords-1].word2,two);
-	newarray[numwords-1].count = 1;
+	newpair->word1 = malloc(strlen(one) + 1);
+	strcpy(newpair->word1,one);
+	newpair->word2 = malloc(strlen(two) + 1);
+	strcpy(newpair->word2,two);
+	newpair->count = 1;
 	
+	//INSERT IN ALPHABETIC ORDER HERE
+	int inserted = 0;
+	pair* curr = list;
+	pair* prev;
+	if (curr == 0){	//list is empty and must insert at front
+		//fprintf(stderr,"list is empty\n");
+		newpair->next = list;
+		list = newpair;
+		//fprintf(stderr,"list is %i and newpair is %i and newpair->next is %i\n",list,newpair,newpair->next);
+	}
+	else
+	{
+		while(curr->next != 0 && inserted == 0)	//while not at the last item in the list
+		{
+			if (strcmp(newpair->word1,curr->word1) > 0){ //needs to go after current word
+				//fprintf(stderr,"%s goes after %s\n",newpair->word1,curr->word1);
+				prev = curr;
+				curr = curr->next;
+			}
+			else if(strcmp(newpair->word1,curr->word1) == 0){ //need to look at second word to break tie
+				if (strcmp(newpair->word2,curr->word2) > 0){ //second word goes after current second word
+					prev = curr;
+					curr = curr->next;
+				}
+				else{
+					newpair->next = curr;
+					prev->next = curr;
+					inserted = 1;
+				}
+			}			
+			else{
+				newpair->next = curr;
+				prev->next = newpair;
+				inserted = 1;
+			}
+		}
+		if (inserted == 0){
+			curr->next = newpair;
+		}			
+	}
 }
 
-void display(pair* pairs)
+void display()
 {
-	int i;
-	for(i = 0; i < numwords; i++)
+	pair* pair = list;
+	int i = 1;
+	fprintf(stderr,"Dictionary currently is:\n");
+	while (pair != 0)
 	{
-		//printf("	Pair: %-5i	 Word 1: %-15s	 Word 2: %-15s	 Occurences: %-5i\n",i,pairs[i].word1,pairs[i].word2,pairs[i].count);
-		printf("%s %s %i\n",pairs[i].word1,pairs[i].word2,pairs[i].count);
-		//snprintf into an array of strings and then sort the array
+		fprintf(stderr,"	Pair: %-5i	 Word 1: %-15s	 Word 2: %-15s	 Occurences: %-5i\n",i,pair->word1,pair->word2,pair->count);
+		pair = pair->next;
+		i++;
 	}
 }
