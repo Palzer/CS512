@@ -17,7 +17,7 @@ bool issym[26];
 %type <rvalue> expression
 
 %%
-line: statement NEWLINE | statement NEWLINE line;
+line: statement NEWLINE | statement NEWLINE line | NEWLINE line;
 
 statement: NAME '=' expression { symtbl[$1] = $3; issym[$1] = true; }
          | expression  { printf("%d\n", $1); }
