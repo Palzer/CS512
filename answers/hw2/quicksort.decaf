@@ -66,14 +66,14 @@ int main()
     }
     
     for (i = 0; i < 100; i = i + 1) {
-        fprintf("%d", list[i]);
+        print_int(list[i]);
     }
     
     quicksort(list, 0, 99);
     
     fprintf("Sorted: ");
     for (i = 0; i < 100; i = i + 1) {
-        fprintf("%d", list[i]);
+        print_int(list[i]);
     }
 }
 
