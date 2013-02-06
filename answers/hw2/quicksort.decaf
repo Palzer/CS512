@@ -1,0 +1,82 @@
+#include <stdio.h>
+#include <math.h>
+
+int partition(int array[], int left, int right, int pivotIndex)
+{
+    int temp;
+    int i;
+    
+    int pivotValue == array[pivotIndex];
+    
+    // Move pivot to end
+    temp = array[pivotIndex];
+    array[pivotIndex] = array[right];
+    array[right] = temp;
+    
+    storeIndex = left;
+    
+    for (i = left; i < right; i++)
+    {
+        if array[i] < pivotValue
+        {
+            temp = array[i];
+            array[i] = array[storeIndex];
+            array[storeIndex] = temp;
+            
+            storeIndex := storeIndex + 1
+        }
+    }
+ 
+    // Move pivot to its final place
+    temp = array[storeIndex];
+    array[storeIndex] = array[right];
+    array[right] = temp;
+    
+    return storeIndex;
+}
+
+
+void quicksort(int array[], int left, int right)
+{
+ 
+     if left < right
+     {
+          int pivotIndex = ceil(left+right/2);
+ 
+          // Get lists of bigger and smaller items and final position of pivot
+          pivotNewIndex = partition(array, left, right, pivotIndex);
+ 
+          // Recursively sort elements smaller than the pivot
+          quicksort(array, left, pivotNewIndex - 1);
+ 
+          // Recursively sort elements at least as big as the pivot
+          quicksort(array, pivotNewIndex + 1, right);
+     }
+}
+
+
+int main()
+{
+    int i;
+    int list[100] = {};
+    
+    fprintf("Unsorted: ");
+    for (i = 0; i < 100; i = i + 1) {
+        list[i] = (i * 2382983) % 100;
+    }
+    
+    for (i = 0; i < 100; i = i + 1) {
+        fprintf("%d", list[i]);
+    }
+    
+    quicksort(list, 0, 99);
+    
+    fprintf("Sorted: ");
+    for (i = 0; i < 100; i = i + 1) {
+        fprintf("%d", list[i]);
+    }
+}
+
+return 0;
+}
+
