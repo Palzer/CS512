@@ -1,5 +1,5 @@
 %{
-#include "multexpr.tab.h"
+#include "simple-expr.tab.h"
 #include <stdlib.h>
 extern int yylval;
 int yyerror (const char *s) {

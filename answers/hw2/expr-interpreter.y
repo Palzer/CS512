@@ -5,29 +5,29 @@ int symtbl[26];
 bool issym[26];
 %}
 
-%token T_DOUBLE T_NUMBER T_NAME T_EXP T_SQRT T_LOG
+%token DOUBLE NUMBER NAME EXP SQRT LOG
 
 %%
 statement_list : statement '\n' statement_list
    |
    ;
 
-statement: T_NAME '=' expression
+statement: NAME '=' expression
    | expression
    ;
 
-expression: expression '+' T_NUMBER
-   | expression '-' T_NUMBER
-   | expression '+' T_DOUBLE
-   | expression '-' T_DOUBLE
-   | expression '+' T_NAME 
-   | expression '-' T_NAME 
-   | T_NUMBER
-   | T_DOUBLE
-   | T_NAME 
-   | T_EXP '(' expression ')'
-   | T_SQRT '(' expression ')'
-   | T_LOG '(' expression ')'
+expression: expression '+' NUMBER
+   | expression '-' NUMBER
+   | expression '+' DOUBLE
+   | expression '-' DOUBLE
+   | expression '+' NAME 
+   | expression '-' NAME 
+   | NUMBER
+   | DOUBLE
+   | NAME 
+   | EXP '(' expression ')'
+   | SQRT '(' expression ')'
+   | LOG '(' expression ')'
    ;
 
 %%
