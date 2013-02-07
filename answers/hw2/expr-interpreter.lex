@@ -8,13 +8,13 @@ int yyerror (const char *s) {
 %}
 
 %%
-[0-9]+    { yylval = atoi(yytext); printf("number\n"); return NUMBER; } /* convert NUMBER token value to integer */
-[0-9]+\.[0-9]+ { yylval = atof(yytext); printf("double\n"); return DOUBLE; }
+[0-9]+    { yylval.num = atoi(yytext); return NUMBER; } /* convert NUMBER token value to integer */
+[0-9]+\.[0-9]+ { yylval.dbl = atof(yytext); return DOUBLE; }
 [\n]	return NEWLINE;
 [ \t]   ;  /* ignore whitespace */
 "sqrt"  return SQRT;
 "exp" 	return EXP;
 "log"	return LOG;
-[a-z]     { yylval = yytext[0] - 'a'; printf("name\n"); return NAME; } /* convert NAME token into index */
+[a-z]     { yylval.num = yytext[0] - 'a'; return NAME; } /* convert NAME token into index */
 .         return yytext[0];
 %%
