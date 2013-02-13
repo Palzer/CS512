@@ -1,81 +1,97 @@
+extern void print_string(string);
 extern void print_int(int);
 
-int partition(int array[], int left, int right, int pivotIndex)
-{
-    int temp;
-    int i;
-    
-    int pivotValue == array[pivotIndex];
-    
-    // Move pivot to end
-    temp = array[pivotIndex];
-    array[pivotIndex] = array[right];
-    array[right] = temp;
-    
-    storeIndex = left;
-    
-    for (i = left; i < right; i++)
-    {
-        if array[i] < pivotValue
-        {
-            temp = array[i];
-            array[i] = array[storeIndex];
-            array[storeIndex] = temp;
-            
-            storeIndex := storeIndex + 1
-        }
-    }
- 
-    // Move pivot to its final place
-    temp = array[storeIndex];
-    array[storeIndex] = array[right];
-    array[right] = temp;
-    
-    return storeIndex;
+class QuickSort {
+
+	int list[100];
+	
+	void cr() { print_string("\n"); }
+	
+	void displayList(int start, int len) {
+		int j;
+		print_string("List:\n");
+		for (j = start; j < start + len; j = j + 1) {
+			print_int(list[j]);
+			print_string(" ");
+//			if ((j - start + 1) % 20 == 0 || j + 1 == start + len) {
+//				cr();
+//			}
+		}
+        cr();
+	}
+	
+	void initList(int size) {
+		int i;
+		for (i = 0; i < size; i = i + 1) {
+			list[i] = (i * 2382983) % 100;
+		}
+	}
+
+	void swap(int leftPtr, int rightPtr) {
+		
+		int temp;
+		temp = list[leftPtr];
+		list[leftPtr] = list[rightPtr];
+		list[rightPtr] = temp;
+	}
+		
+	void quickSort(int left, int right) {
+	
+		if (right - left <= 0) {
+			return;
+		} else {
+			int pivot, part;
+			pivot = list[right];
+			part = partition(left, right, pivot);
+			quickSort(left, part - 1);
+			quickSort(part+1, right);
+		}	
+	}
+	
+	int main() {
+		int size;
+		size = 100;
+		initList(size);
+
+		displayList(0,size);
+		quickSort(0,size-1);
+
+		print_string("After sorting:\n");
+		displayList(0,size);
+	}
+	
+	int partition(int left, int right, int pivot) {
+	
+		int leftPtr;
+		int rightPtr;
+		
+		leftPtr = left-1;
+		rightPtr = right;
+
+		while (true) {
+			while (true) {
+				leftPtr = leftPtr + 1;
+				if (list[leftPtr] >= pivot) {
+					break;
+				}
+			}
+			while (true) {
+				if (rightPtr <= 0) {
+					break;
+				}
+				rightPtr = rightPtr - 1;
+				if (list[rightPtr] <= pivot) {
+					break;
+				}
+			}
+			if (leftPtr >= rightPtr) {
+				break;
+			} else {
+				swap(leftPtr,rightPtr);
+			}
+		}
+		
+		swap(leftPtr, right);
+		return(leftPtr);
+	}
 }
-
-
-void quicksort(int array[], int left, int right)
-{
- 
-     if left < right
-     {
-          int pivotIndex = ceil(left+right/2);
- 
-          // Get lists of bigger and smaller items and final position of pivot
-          pivotNewIndex = partition(array, left, right, pivotIndex);
- 
-          // Recursively sort elements smaller than the pivot
-          quicksort(array, left, pivotNewIndex - 1);
- 
-          // Recursively sort elements at least as big as the pivot
-          quicksort(array, pivotNewIndex + 1, right);
-     }
-}
-
-
-int main()
-{
-    int i;
-    int list[100] = {};
-    
-    fprintf("Unsorted: ");
-    for (i = 0; i < 100; i = i + 1) {
-        list[i] = (i * 2382983) % 100;
-    }
-    
-    for (i = 0; i < 100; i = i + 1) {
-        print_int(list[i]);
-    }
-    
-    quicksort(list, 0, 99);
-    
-    fprintf("Sorted: ");
-    for (i = 0; i < 100; i = i + 1) {
-        print_int(list[i]);
-    }
-}
-
-return 0;
-}
-
