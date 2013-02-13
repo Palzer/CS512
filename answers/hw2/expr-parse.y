@@ -54,7 +54,7 @@ t : t TIMES f {string str = "(TIMES *)"; $$ = build_tree("t", 3, $1, &str, $3); 
 	;
 	
 f : LPAREN e RPAREN {string strl = "(LPAREN \\()"; string strr = "(RPAREN \\))"; $$ = build_tree("t", 3, &strl, $2, &strr);}
-	| ID {string str = string("(ID") + $1 + string(" )"); $$ = build_tree("e", 1, &str);}
+	| ID {string str = string("(ID ") + $1 + string(")"); $$ = build_tree("e", 1, &str);}
 	;
 
 %%
