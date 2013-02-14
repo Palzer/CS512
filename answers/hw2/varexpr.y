@@ -16,6 +16,8 @@ bool issym[26];
 
 %type <rvalue> expression
 
+%left '+' '-'
+
 %%
 line: statement NEWLINE | statement NEWLINE line | NEWLINE line;
 
