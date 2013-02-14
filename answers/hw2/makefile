@@ -39,7 +39,7 @@ testall: $(targets) $(cpptargets)
 	@echo "testing Question 2 ..."
 	cat ../expr-testfile.txt | ./expr-interpreter
 	cat expr-testfile2.txt | ./expr-interpreter
-	@echo "testing Question 3 ..."
+	@echo "testing Question 3 ..."       
 	cat quicksort.decaf
 	@echo "testing Question 4 ..."
 	cat decafGrammar.txt
